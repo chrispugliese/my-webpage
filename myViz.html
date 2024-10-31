@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizations</title>
+    <title>Spending Visualizations</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
 </head>
 <body>
-    <h1>Visualization of Titanic Data</h1>
-    
-    <h2>Survived vs. Did Not Survive (Age Distribution)</h2>
-    <img src="Lab2.8/survival_histogram.png" alt="Survived vs Did Not Survive Age Distribution">
+    <h1>Spending Visualizations</h1>
 
-    <h2>Survival Rate by Passenger Class and Gender</h2>
-    <img src="Lab2.8/survival_rate_by_class_gender.png" alt="Survival Rate by Class and Gender">
+    <!-- Container for the line chart -->
+    <h2>Total Spending Over the Years</h2>
+    <div id="line-chart"></div>
 
-    <h2>Age vs Fare: Survival Status</h2>
-    <img src="Lab2.8/age_vs_fare.png" alt="Age vs Fare Scatter Plot">
+    <!-- Container for the stacked bar chart -->
+    <h2>Spending Breakdown by Category</h2>
+    <div id="stacked-bar-chart"></div>
 
+    <script src="spending_visualizations.js"></script>
 </body>
 </html>
