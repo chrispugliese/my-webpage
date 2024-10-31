@@ -123,9 +123,12 @@ d3.csv("spending_totals.csv").then(function(data) {
         .style("font-size", "16px")
         .text("Spending Breakdown by Category");
 
+        
+
         // Legend for the stacked bar chart
-const legend = barChartSvg.append("g")
-    .attr("transform", `translate(${barChartWidth - 150}, ${barChartMargin.top})`);
+        const legend = barChartSvg.append("g")
+        .attr("transform", `translate(${barChartWidth - 100}, ${barChartMargin.top})`);
+    
 
 categories.forEach((category, i) => {
     const legendRow = legend.append("g")
