@@ -70,6 +70,7 @@ d3.csv("spending_totals.csv").then(function(data) {
     const categories = ["costumes", "candy", "decorations", "cards"];
     const stack = d3.stack().keys(categories);
     const series = stack(data);
+    
 
     // Bar chart scales
     const xScaleBar = d3.scaleBand()
@@ -121,5 +122,28 @@ d3.csv("spending_totals.csv").then(function(data) {
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
         .text("Spending Breakdown by Category");
+
+        // Legend for the stacked bar chart
+const legend = barChartSvg.append("g")
+    .attr("transform", `translate(${barChartWidth - 150}, ${barChartMargin.top})`);
+
+categories.forEach((category, i) => {
+    const legendRow = legend.append("g")
+        .attr("transform", `translate(0, ${i * 20})`);
+
+    // Add colored rectangles
+    legendRow.append("rect")
+        .attr("width", 15)
+        .attr("height", 15)
+        .attr("fill", colorScale(category));
+
+    // Add category text
+    legendRow.append("text")
+        .attr("x", 20)
+        .attr("y", 12)
+        .attr("text-anchor", "start")
+        .style("font-size", "12px")
+        .text(category.charAt(0).toUpperCase() + category.slice(1));
+});
 });
 
