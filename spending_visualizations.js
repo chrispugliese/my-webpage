@@ -125,28 +125,28 @@ d3.csv("spending_totals.csv").then(function(data) {
 
         
 
-        // Legend for the stacked bar chart
-        const legend = barChartSvg.append("g")
-        .attr("transform", `translate(${barChartWidth - 100}, ${barChartMargin.top})`);
-    
+    // Move the legend above the chart, closer to the top-left corner
+    const legend = barChartSvg.append("g")
+        .attr("transform", `translate(${barChartMargin.left}, ${barChartMargin.top - 30})`);
+        
 
-categories.forEach((category, i) => {
-    const legendRow = legend.append("g")
-        .attr("transform", `translate(0, ${i * 20})`);
+    categories.forEach((category, i) => {
+        const legendRow = legend.append("g")
+            .attr("transform", `translate(0, ${i * 20})`);
 
-    // Add colored rectangles
-    legendRow.append("rect")
-        .attr("width", 15)
-        .attr("height", 15)
-        .attr("fill", colorScale(category));
+        // Add colored rectangles
+        legendRow.append("rect")
+            .attr("width", 15)
+            .attr("height", 15)
+            .attr("fill", colorScale(category));
 
-    // Add category text
-    legendRow.append("text")
-        .attr("x", 20)
-        .attr("y", 12)
-        .attr("text-anchor", "start")
-        .style("font-size", "12px")
-        .text(category.charAt(0).toUpperCase() + category.slice(1));
-});
+        // Add category text
+        legendRow.append("text")
+            .attr("x", 20)
+            .attr("y", 12)
+            .attr("text-anchor", "start")
+            .style("font-size", "12px")
+            .text(category.charAt(0).toUpperCase() + category.slice(1));
+    });
 });
 
