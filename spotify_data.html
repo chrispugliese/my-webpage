@@ -7,7 +7,7 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       background-color: #f4f4f9;
       margin: 0;
       padding: 20px;
@@ -15,6 +15,9 @@
     h1 {
       text-align: center;
       margin-bottom: 20px;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-weight: bold;
+      color: #333;
     }
     #chart {
       margin: auto;
@@ -23,13 +26,17 @@
     }
     #tooltip {
       position: absolute;
-      background: #fff;
-      border: 1px solid #ccc;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
       border-radius: 5px;
       padding: 10px;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
       display: none;
       pointer-events: none;
+      font-size: 12px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    }
+    .bar:hover {
+      opacity: 0.8;
     }
   </style>
 </head>
@@ -59,7 +66,7 @@
         .slice(0, 10);
 
       // Set up dimensions
-      const margin = { top: 40, right: 30, bottom: 100, left: 80 };
+      const margin = { top: 40, right: 30, bottom: 50, left: 80 };
       const width = 1000 - margin.left - margin.right;
       const height = 600 - margin.top - margin.bottom;
 
@@ -82,22 +89,8 @@
         .nice()
         .range([height, 0]);
 
-      // Add gridlines
-      svg.append("g")
-        .attr("class", "grid")
-        .call(d3.axisLeft(y).tickSize(-width).tickFormat(""))
-        .style("stroke-dasharray", "3 3");
-
-      // Add axes
-      svg.append("g")
-        .attr("transform", `translate(0, ${height})`)
-        .call(d3.axisBottom(x))
-        .selectAll("text")
-        .attr("transform", "rotate(-45)")
-        .style("text-anchor", "end")
-        .style("font-size", "12px");
-
-      svg.append("g").call(d3.axisLeft(y));
+      // Add y-axis
+      svg.append("g").call(d3.axisLeft(y).tickSize(0)); // Removed gridlines
 
       // Add bars with hover and tooltip functionality
       const tooltip = d3.select("#tooltip");
@@ -111,7 +104,8 @@
         .attr("y", d => y(d.count))
         .attr("width", x.bandwidth())
         .attr("height", d => height - y(d.count))
-        .attr("fill", "#69b3a2")
+        .attr("fill", "#4CAF50") // Sleek green color
+        .style("transition", "transform 0.2s ease")
         .on("mouseover", function(event, d) {
           tooltip
             .style("display", "block")
@@ -122,7 +116,7 @@
             )
             .style("left", `${event.pageX + 10}px`)
             .style("top", `${event.pageY - 30}px`);
-          d3.select(this).attr("fill", "#ff6363");
+          d3.select(this).style("transform", "scale(1.05)"); // Slight growth on hover
         })
         .on("mousemove", function(event) {
           tooltip
@@ -131,10 +125,10 @@
         })
         .on("mouseout", function() {
           tooltip.style("display", "none");
-          d3.select(this).attr("fill", "#69b3a2");
+          d3.select(this).style("transform", "scale(1)"); // Reset scale
         });
 
-      // Add labels to bars
+      // Add labels to bars (optional, just play counts)
       svg.selectAll(".label")
         .data(topTracks)
         .enter()
@@ -143,6 +137,7 @@
         .attr("y", d => y(d.count) - 5)
         .attr("text-anchor", "middle")
         .style("font-size", "12px")
+        .style("font-weight", "bold")
         .text(d => d.count);
 
       // Add chart title
@@ -152,6 +147,7 @@
         .attr("text-anchor", "middle")
         .style("font-size", "18px")
         .style("font-weight", "bold")
+        .style("color", "#333")
         .text("Top 10 Tracks from Your Streaming History");
     }).catch(error => {
       console.error("Error loading JSON:", error);
