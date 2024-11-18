@@ -14,17 +14,29 @@
     }
     h1 {
       text-align: center;
+      margin-bottom: 20px;
     }
     #chart {
       margin: auto;
       width: 80%;
-      height: 500px;
+      height: 600px;
+    }
+    #tooltip {
+      position: absolute;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      display: none;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
   <h1>Top 10 Tracks from Your Streaming History</h1>
   <div id="chart"></div>
+  <div id="tooltip"></div>
   <script>
     // Load JSON file
     d3.json('StreamingHistory_music_0.json').then(data => {
@@ -41,14 +53,12 @@
         .sort((a, b) => b.count - a.count)
         .slice(0, 10);
 
-      console.log(topTracks); // Debugging
+      // Set up dimensions
+      const margin = { top: 40, right: 30, bottom: 100, left: 80 };
+      const width = 1000 - margin.left - margin.right;
+      const height = 600 - margin.top - margin.bottom;
 
-      // Set dimensions for the chart
-      const margin = { top: 20, right: 30, bottom: 50, left: 60 };
-      const width = 800 - margin.left - margin.right;
-      const height = 400 - margin.top - margin.bottom;
-
-      // Create an SVG container
+      // Create SVG container
       const svg = d3.select("#chart")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -67,17 +77,26 @@
         .nice()
         .range([height, 0]);
 
+      // Add gridlines
+      svg.append("g")
+        .attr("class", "grid")
+        .call(d3.axisLeft(y).tickSize(-width).tickFormat(""))
+        .style("stroke-dasharray", "3 3");
+
       // Add axes
       svg.append("g")
         .attr("transform", `translate(0, ${height})`)
         .call(d3.axisBottom(x))
         .selectAll("text")
         .attr("transform", "rotate(-45)")
-        .style("text-anchor", "end");
+        .style("text-anchor", "end")
+        .style("font-size", "12px");
 
       svg.append("g").call(d3.axisLeft(y));
 
-      // Add bars
+      // Add bars with hover and tooltip functionality
+      const tooltip = d3.select("#tooltip");
+
       svg.selectAll(".bar")
         .data(topTracks)
         .enter()
@@ -87,9 +106,26 @@
         .attr("y", d => y(d.count))
         .attr("width", x.bandwidth())
         .attr("height", d => height - y(d.count))
-        .attr("fill", "#69b3a2");
+        .attr("fill", "#69b3a2")
+        .on("mouseover", function(event, d) {
+          tooltip
+            .style("display", "block")
+            .html(`<strong>Track:</strong> ${d.name}<br><strong>Plays:</strong> ${d.count}`)
+            .style("left", `${event.pageX + 10}px`)
+            .style("top", `${event.pageY - 30}px`);
+          d3.select(this).attr("fill", "#ff6363");
+        })
+        .on("mousemove", function(event) {
+          tooltip
+            .style("left", `${event.pageX + 10}px`)
+            .style("top", `${event.pageY - 30}px`);
+        })
+        .on("mouseout", function() {
+          tooltip.style("display", "none");
+          d3.select(this).attr("fill", "#69b3a2");
+        });
 
-      // Add labels
+      // Add labels to bars
       svg.selectAll(".label")
         .data(topTracks)
         .enter()
@@ -97,7 +133,17 @@
         .attr("x", d => x(d.name) + x.bandwidth() / 2)
         .attr("y", d => y(d.count) - 5)
         .attr("text-anchor", "middle")
+        .style("font-size", "12px")
         .text(d => d.count);
+
+      // Add chart title
+      svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", -10)
+        .attr("text-anchor", "middle")
+        .style("font-size", "18px")
+        .style("font-weight", "bold")
+        .text("Top 10 Tracks from Your Streaming History");
     }).catch(error => {
       console.error("Error loading JSON:", error);
     });
