@@ -40,19 +40,21 @@
   <script>
     // Load JSON file
     d3.json('StreamingHistory_music_0.json').then(data => {
-      // Process data: Aggregate play counts for each track
+      // Process data: Aggregate play counts and include artist names
       const trackCounts = {};
       data.forEach(entry => {
         const trackName = entry.trackName;
-        const artistName = entry.artistName;
+        const artistName = entry.artistName; // Assuming artistName is a property in your JSON file
+
         if (!trackCounts[trackName]) {
           trackCounts[trackName] = { count: 0, artist: artistName };
         }
         trackCounts[trackName].count += 1;
       });
+
       // Convert to an array and sort by play count
       const topTracks = Object.entries(trackCounts)
-        .map(([name, count]) => ({ name, count }))
+        .map(([name, { count, artist }]) => ({ name, count, artist }))
         .sort((a, b) => b.count - a.count)
         .slice(0, 10);
 
@@ -113,7 +115,11 @@
         .on("mouseover", function(event, d) {
           tooltip
             .style("display", "block")
-            .html(`<strong>Track:</strong> ${d.name}<br><strong>Plays:</strong> ${d.count}`)
+            .html(
+              `<strong>Track:</strong> ${d.name}<br>
+               <strong>Artist:</strong> ${d.artist}<br>
+               <strong>Plays:</strong> ${d.count}`
+            )
             .style("left", `${event.pageX + 10}px`)
             .style("top", `${event.pageY - 30}px`);
           d3.select(this).attr("fill", "#ff6363");
