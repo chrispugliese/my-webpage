@@ -44,9 +44,12 @@
       const trackCounts = {};
       data.forEach(entry => {
         const trackName = entry.trackName;
-        trackCounts[trackName] = (trackCounts[trackName] || 0) + 1;
+        const artistName = entry.artistName;
+        if (!trackCounts[trackName]) {
+          trackCounts[trackName] = { count: 0, artist: artistName };
+        }
+        trackCounts[trackName].count += 1;
       });
-
       // Convert to an array and sort by play count
       const topTracks = Object.entries(trackCounts)
         .map(([name, count]) => ({ name, count }))
