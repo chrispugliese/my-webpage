@@ -21,8 +21,9 @@
     }
     #chart {
       margin: auto;
-      width: 80%;
+      width: 95%;
       height: 600px;
+      overflow-x: scroll;
     }
     #tooltip {
       position: absolute;
@@ -41,33 +42,37 @@
   </style>
 </head>
 <body>
-  <h1>Top 10 Tracks from Your Streaming History</h1>
+  <h1>Spotify Streaming History: Listening Trends</h1>
   <div id="chart"></div>
   <div id="tooltip"></div>
   <script>
     // Load JSON file
     d3.json('StreamingHistory_music_0.json').then(data => {
-      // Process data: Aggregate play counts and include artist names
+      // Process data: Parse dates and aggregate play counts by song
       const trackCounts = {};
       data.forEach(entry => {
         const trackName = entry.trackName;
-        const artistName = entry.artistName; // Assuming artistName is a property in your JSON file
+        const artistName = entry.artistName; // Assuming artistName is a property
+        const playedAt = new Date(entry.playedAt); // Assuming playedAt is a valid timestamp
 
         if (!trackCounts[trackName]) {
-          trackCounts[trackName] = { count: 0, artist: artistName };
+          trackCounts[trackName] = { count: 0, artist: artistName, lastPlayed: playedAt };
         }
         trackCounts[trackName].count += 1;
+        if (playedAt > trackCounts[trackName].lastPlayed) {
+          trackCounts[trackName].lastPlayed = playedAt;
+        }
       });
 
       // Convert to an array and sort by play count
-      const topTracks = Object.entries(trackCounts)
-        .map(([name, { count, artist }]) => ({ name, count, artist }))
+      const tracks = Object.entries(trackCounts)
+        .map(([name, { count, artist, lastPlayed }]) => ({ name, count, artist, lastPlayed }))
         .sort((a, b) => b.count - a.count)
-        .slice(0, 10);
+        .slice(0, 20); // Change this value to display more songs
 
       // Set up dimensions
       const margin = { top: 40, right: 30, bottom: 50, left: 80 };
-      const width = 1000 - margin.left - margin.right;
+      const width = Math.max(1200, tracks.length * 50) - margin.left - margin.right;
       const height = 600 - margin.top - margin.bottom;
 
       // Create SVG container
@@ -80,23 +85,26 @@
 
       // Define scales
       const x = d3.scaleBand()
-        .domain(topTracks.map(d => d.name))
+        .domain(tracks.map(d => d.name))
         .range([0, width])
         .padding(0.2);
 
       const y = d3.scaleLinear()
-        .domain([0, d3.max(topTracks, d => d.count)])
+        .domain([0, d3.max(tracks, d => d.count)])
         .nice()
         .range([height, 0]);
 
+      const colorScale = d3.scaleSequential(d3.interpolateBlues) // Intensity-based coloring
+        .domain([0, d3.max(tracks, d => d.count)]);
+
       // Add y-axis
-      svg.append("g").call(d3.axisLeft(y).tickSize(0)); // Removed gridlines
+      svg.append("g").call(d3.axisLeft(y).ticks(10));
 
       // Add bars with hover and tooltip functionality
       const tooltip = d3.select("#tooltip");
 
       svg.selectAll(".bar")
-        .data(topTracks)
+        .data(tracks)
         .enter()
         .append("rect")
         .attr("class", "bar")
@@ -104,19 +112,19 @@
         .attr("y", d => y(d.count))
         .attr("width", x.bandwidth())
         .attr("height", d => height - y(d.count))
-        .attr("fill", "#4CAF50") // Sleek green color
-        .style("transition", "transform 0.2s ease")
+        .attr("fill", d => colorScale(d.count)) // Color intensity based on play count
         .on("mouseover", function(event, d) {
           tooltip
             .style("display", "block")
             .html(
               `<strong>Track:</strong> ${d.name}<br>
                <strong>Artist:</strong> ${d.artist}<br>
-               <strong>Plays:</strong> ${d.count}`
+               <strong>Plays:</strong> ${d.count}<br>
+               <strong>Last Played:</strong> ${d.lastPlayed.toLocaleDateString()}`
             )
             .style("left", `${event.pageX + 10}px`)
             .style("top", `${event.pageY - 30}px`);
-          d3.select(this).style("transform", "scale(1.05)"); // Slight growth on hover
+          d3.select(this).style("transform", "scale(1.05)");
         })
         .on("mousemove", function(event) {
           tooltip
@@ -125,12 +133,12 @@
         })
         .on("mouseout", function() {
           tooltip.style("display", "none");
-          d3.select(this).style("transform", "scale(1)"); // Reset scale
+          d3.select(this).style("transform", "scale(1)");
         });
 
-      // Add labels to bars (optional, just play counts)
+      // Add labels to bars
       svg.selectAll(".label")
-        .data(topTracks)
+        .data(tracks)
         .enter()
         .append("text")
         .attr("x", d => x(d.name) + x.bandwidth() / 2)
@@ -148,7 +156,7 @@
         .style("font-size", "18px")
         .style("font-weight", "bold")
         .style("color", "#333")
-        .text("Top 10 Tracks from Your Streaming History");
+        .text("Top 20 Tracks from Your Streaming History");
     }).catch(error => {
       console.error("Error loading JSON:", error);
     });
