@@ -100,7 +100,7 @@
       // Add y-axis
       svg.append("g").call(d3.axisLeft(y).ticks(10));
 
-      // Add bars with hover and tooltip functionality
+      // Add bars with downward animation and tooltip functionality
       const tooltip = d3.select("#tooltip");
 
       svg.selectAll(".bar")
@@ -109,10 +109,17 @@
         .append("rect")
         .attr("class", "bar")
         .attr("x", d => x(d.name))
-        .attr("y", d => y(d.count))
+        .attr("y", height) // Start from the bottom
         .attr("width", x.bandwidth())
-        .attr("height", d => height - y(d.count))
-        .attr("fill", d => colorScale(d.count)) // Color intensity based on play count
+        .attr("height", 0) // Initial height of 0
+        .attr("fill", d => colorScale(d.count))
+        .transition() // Add transition for animation
+        .duration(800) // Animation duration in milliseconds
+        .attr("y", d => y(d.count)) // Move to the correct position
+        .attr("height", d => height - y(d.count)); // Grow to the correct height
+
+      // Add hover functionality
+      svg.selectAll(".bar")
         .on("mouseover", function(event, d) {
           tooltip
             .style("display", "block")
@@ -124,7 +131,7 @@
             )
             .style("left", `${event.pageX + 10}px`)
             .style("top", `${event.pageY - 30}px`);
-          d3.select(this).style("transform", "scale(1.05)");
+          d3.select(this).style("opacity", "0.8");
         })
         .on("mousemove", function(event) {
           tooltip
@@ -133,7 +140,7 @@
         })
         .on("mouseout", function() {
           tooltip.style("display", "none");
-          d3.select(this).style("transform", "scale(1)");
+          d3.select(this).style("opacity", "1");
         });
 
       // Add labels to bars
