@@ -46,6 +46,7 @@
       align-items: center;
       width: 100%;
       max-width: 400px;
+      
     }
 
     a.button {
@@ -88,6 +89,42 @@
     .socials a:hover {
       text-decoration: underline;
     }
+    .project-showcase {
+    padding: 40px 20px;
+    text-align: center;
+    }
+
+    .project-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin: 20px auto;
+    max-width: 600px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: left;
+    }
+
+    .project-card h3 {
+    margin-top: 0;
+    color: var(--primary);
+    }
+
+    .project-card p {
+    color: var(--text);
+    line-height: 1.6;
+    }
+
+    .project-links a {
+    margin-right: 15px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    }
+
+    .project-links a:hover {
+    text-decoration: underline;
+    }
+
 
     @media (max-width: 500px) {
       h1 {
@@ -108,14 +145,30 @@
 <body>
 
   <h1>Christopher Pugliese</h1>
-  <h2>Explore my latest visualizations and resume</h2>
+  <h2>Explore my latest visualizations, projects, and resume</h2>
 
   <div class="button-container">
     <a class="button" href="myViz.html">Tableau Project (2024-11-11)</a>
     <a class="button" href="spotify_data.html">Spotify Data with D3.js</a>
     <a class="button" href="spotify_tableau_project.html">Spotify Data with Tableau</a>
     <a class="button" href="Christopher Pugliese Resume 2 2025-1.pdf" target="_blank">📄 View My Resume</a>
+    <a class="button" href="Christopher Pugliese Resume 2 2025-1.pdf" target="_blank">📄 View My Resume</a>
+
   </div>
+
+  <!-- Project section (outside the button container) -->
+<section class="project-showcase">
+  <h2 style="margin-top: 60px;">Featured Project</h2>
+  <div class="project-card">
+    <h3>Sample Share</h3>
+    <p>A web app for music producers to upload and share samples, collaborate with others, and build creative projects. Built using Django, PostgreSQL, and Docker.</p>
+    <div class="project-links">
+      <a href="https://github.com/SampleShare/SampleShare" target="_blank">🔗 View on GitHub</a>
+      <!-- Optional: Add a live demo -->
+      <!-- <a href="https://yourdemo.site" target="_blank">🚀 Live Demo</a> -->
+    </div>
+  </div>
+</section>
 
   <footer>
     <div class="socials">
