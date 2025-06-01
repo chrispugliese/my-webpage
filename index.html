@@ -1,52 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Christopher Pugliese's Data Visualizations</title>
-    <style>
-        body {
-            background-color: #f0f2f5;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-        h1 {
-            color: #2C3E50;
-            margin-top: 50px;
-            font-size: 2.5em;
-        }
-        h2 {
-            color: #7F8C8D;
-            font-size: 1.5em;
-            margin-bottom: 40px;
-        }
-        a {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #3498DB;
-            color: #fff;
-            text-decoration: none;
-            font-size: 1.2em;
-            border-radius: 8px;
-            transition: background-color 0.3s;
-        }
-        a:hover {
-            background-color: #2980B9;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Christopher Pugliese | Data Visualizations</title>
+  <style>
+    :root {
+      --primary: #2c3e50;
+      --accent: #3498db;
+      --accent-dark: #2980b9;
+      --text: #333;
+      --subtext: #7f8c8d;
+      --bg: #f4f7fa;
+    }
+
+    body {
+      background-color: var(--bg);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      margin-top: 40px;
+      font-size: 3rem;
+      color: var(--primary);
+    }
+
+    h2 {
+      color: var(--subtext);
+      font-weight: 400;
+      margin: 10px 0 40px;
+      text-align: center;
+    }
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    a.button {
+      display: block;
+      width: 100%;
+      padding: 15px 20px;
+      text-align: center;
+      background-color: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    a.button:hover {
+      background-color: var(--accent-dark);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      margin-top: auto;
+      width: 100%;
+      background-color: #ecf0f1;
+      padding: 20px 0;
+      text-align: center;
+      color: #555;
+      font-size: 0.9rem;
+      border-top: 1px solid #ccc;
+    }
+
+    .socials a {
+      margin: 0 10px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .socials a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 500px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      h2 {
+        font-size: 1rem;
+      }
+
+      a.button {
+        font-size: 1rem;
+        padding: 12px 16px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <h1>Christopher Pugliese</h1>
-    <h2>Below are links to my latest Visualizations and Resume. Enjoy!</h2>
-    <a href="myViz.html">View Tableau Project 2024-11-11</a>
-    <a href="spotify_data.html">Spotify Data Using D3.js</a>
-    <a href="spotify_tableau_project.html">Spotify Data Using Tableau</a>
-    <a href="Christopher Pugliese Resume 2 2025-1.pdf">My Resume</a>
+  <h1>Christopher Pugliese</h1>
+  <h2>Explore my latest visualizations and resume</h2>
 
+  <div class="button-container">
+    <a class="button" href="myViz.html">Tableau Project (2024-11-11)</a>
+    <a class="button" href="spotify_data.html">Spotify Data with D3.js</a>
+    <a class="button" href="spotify_tableau_project.html">Spotify Data with Tableau</a>
+    <a class="button" href="Christopher Pugliese Resume 2 2025-1.pdf" target="_blank">📄 View My Resume</a>
+  </div>
+
+  <footer>
+    <div class="socials">
+      <a href="https://github.com/chrispugliese" target="_blank">GitHub</a>
+      <a href="mailto:christopherpugliese38@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/christopher-pugliese-36b558227/" target="_blank">LinkedIn</a>
+    </div>
+    <p>&copy; 2025 Christopher Pugliese. All rights reserved.</p>
+  </footer>
 
 </body>
 </html>
