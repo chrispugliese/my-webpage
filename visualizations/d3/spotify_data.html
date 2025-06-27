@@ -47,7 +47,7 @@
   <div id="tooltip"></div>
   <script>
     // Load JSON file
-    d3.json('StreamingHistory_music_0.json').then(data => {
+    d3.json('../../data/spotify/StreamingHistory_music_0.json').then(data => {
       // Process data: Parse dates and aggregate play counts by song
       const trackCounts = {};
       data.forEach(entry => {
