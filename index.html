@@ -4,200 +4,462 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Christopher Pugliese</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
 :root {
-  --bg: #121212;
-  --card-bg: #1e1e1e;
-  --primary: #ffffff;
-  --subtext: #a8a8a8;
-  --accent: #4f46e5;
-  --accent-dark: #4338ca;
-  --border: #333;
+  --bg: #0a0a0a;
+  --card-bg: rgba(16, 16, 16, 0.9);
+  --primary: #00ff41;
+  --subtext: #00cc33;
+  --accent: #00ff88;
+  --accent-dark: #00cc66;
+  --border: #00ff41;
+  --glow: #00ff41;
+  --text-shadow: 0 0 10px #00ff41;
+  --box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
   background-color: var(--bg);
-  font-family: 'Inter', sans-serif;
-  margin: 0;
-  padding: 0;
+  font-family: 'Roboto Mono', monospace;
   color: var(--primary);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Animated Background */
+.background-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.1;
+}
+
+.grid {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+.floating-pixels {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.pixel {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background-color: var(--primary);
+  animation: float 6s ease-in-out infinite;
+}
+
+.pixel:nth-child(1) { left: 10%; animation-delay: 0s; }
+.pixel:nth-child(2) { left: 20%; animation-delay: 1s; }
+.pixel:nth-child(3) { left: 30%; animation-delay: 2s; }
+.pixel:nth-child(4) { left: 40%; animation-delay: 3s; }
+.pixel:nth-child(5) { left: 50%; animation-delay: 4s; }
+.pixel:nth-child(6) { left: 60%; animation-delay: 5s; }
+.pixel:nth-child(7) { left: 70%; animation-delay: 0s; }
+.pixel:nth-child(8) { left: 80%; animation-delay: 1s; }
+.pixel:nth-child(9) { left: 90%; animation-delay: 2s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(100vh) scale(0); opacity: 0; }
+  50% { transform: translateY(50vh) scale(1); opacity: 1; }
+}
+
+/* Main Content */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 60px;
+  animation: fadeInUp 1s ease-out;
 }
 
 h1 {
-  margin-top: 40px;
-  font-size: 3rem;
+  font-family: 'Orbitron', monospace;
+  font-size: 4rem;
+  font-weight: 900;
   color: var(--primary);
+  text-shadow: var(--text-shadow);
+  margin-bottom: 20px;
+  letter-spacing: 4px;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 10px var(--glow); }
+  to { text-shadow: 0 0 20px var(--glow), 0 0 30px var(--glow); }
 }
 
 h2 {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.2rem;
   color: var(--subtext);
-  font-weight: 400;
-  margin: 10px 0 40px;
-  text-align: center;
+  font-weight: 300;
+  letter-spacing: 2px;
+  animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .content-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 40px;
-  flex-wrap: wrap;
-  width: 100%;
-  max-width: 1200px;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.project-card,
-.button-container {
-  width: 100%;
-  max-width: 500px;
-  box-sizing: border-box;
+  animation: fadeInUp 1s ease-out 0.6s both;
 }
 
 .project-card {
-  background-color: var(--card-bg);
-  border-radius: 10px;
-  padding: 25px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: var(--box-shadow);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.project-card:hover::before {
+  left: 100%;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 255, 65, 0.4);
+  border-color: var(--accent);
 }
 
 .project-card h3 {
-  margin-top: 0;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
   color: var(--primary);
+  text-shadow: 0 0 5px var(--glow);
 }
 
 .project-card p {
-  color: var(--primary);
+  color: var(--subtext);
   line-height: 1.6;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
 }
 
 .project-links a {
   display: inline-block;
-  margin-top: 10px;
-  margin-right: 15px;
   color: var(--accent);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
+  margin-right: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.project-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.project-links a:hover::after {
+  width: 100%;
 }
 
 .project-links a:hover {
-  text-decoration: underline;
-  color: var(--accent-dark);
+  color: var(--primary);
+  text-shadow: 0 0 5px var(--glow);
 }
 
 hr {
-  margin: 20px 0;
+  margin: 25px 0;
   border: none;
-  border-top: 1px solid var(--border);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
 }
 
 .button-container {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  align-items: stretch;
 }
 
 a.button {
   display: block;
-  padding: 15px 20px;
+  padding: 18px 25px;
   text-align: center;
-  background-color: var(--accent);
-  color: #fff;
+  background: linear-gradient(45deg, var(--accent), var(--accent-dark));
+  color: var(--bg);
   text-decoration: none;
-  font-size: 1.1rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-family: 'Orbitron', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  box-shadow: var(--box-shadow);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 1px;
+}
+
+a.button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+a.button:hover::before {
+  left: 100%;
 }
 
 a.button:hover {
-  background-color: var(--accent-dark);
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 255, 65, 0.5);
+  background: linear-gradient(45deg, var(--primary), var(--accent));
 }
 
 footer {
-  margin-top: auto;
-  width: 100%;
-  background-color: var(--card-bg);
-  padding: 20px 0;
+  margin-top: 80px;
   text-align: center;
-  color: var(--subtext);
-  font-size: 0.9rem;
+  padding: 30px 0;
   border-top: 1px solid var(--border);
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+}
+
+.socials {
+  margin-bottom: 20px;
 }
 
 .socials a {
-  margin: 0 10px;
+  display: inline-block;
+  margin: 0 15px;
   color: var(--accent);
   text-decoration: none;
   font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.socials a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.socials a:hover::after {
+  width: 100%;
 }
 
 .socials a:hover {
-  text-decoration: underline;
+  color: var(--primary);
+  text-shadow: 0 0 5px var(--glow);
 }
 
+footer p {
+  color: var(--subtext);
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
   .content-wrapper {
-    flex-direction: column;
-    align-items: center;
+    grid-template-columns: 1fr;
+    gap: 30px;
   }
-
-  .project-card,
-  .button-container {
-    max-width: 90%;
+  
+  h1 {
+    font-size: 2.5rem;
+  }
+  
+  .container {
+    padding: 20px 15px;
+  }
+  
+  .project-card {
+    padding: 20px;
   }
 }
 
+/* Loading Animation */
+.loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeOut 1s ease-out 2s forwards;
+}
 
+.loading-text {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.5rem;
+  color: var(--primary);
+  animation: loadingPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes loadingPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; visibility: hidden; }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
   </style>
 </head>
 <body>
+  <!-- Loading Screen -->
+  <div class="loading">
+    <div class="loading-text">INITIALIZING...</div>
+  </div>
 
-  <h1>Christopher Pugliese</h1>
-  <h2>Explore my resume, latest projects, and some visualizations</h2>
+  <!-- Animated Background -->
+  <div class="background-animation">
+    <div class="grid"></div>
+    <div class="floating-pixels">
+      <div class="pixel"></div>
+      <div class="pixel"></div>
+      <div class="pixel"></div>
+      <div class="pixel"></div>
+      <div class="pixel"></div>
+      <div class="pixel"></div>
+      <div class="pixel"></div>
+      <div class="pixel"></div>
+      <div class="pixel"></div>
+    </div>
+  </div>
 
-  <div class="content-wrapper">
-    <div class="project-card">
-      <h3>Random Melody Generator</h3>
-      <p>A simple Java application that generates a random melody in a chosen key, plays it, and exports it as a MIDI file you can use in DAWs like Ableton, Logic, or FL Studio.</p>
-      <div class="project-links">
-        <a href="https://github.com/chrispugliese/melody-generator" target="_blank">🔗 View on GitHub</a>
-      </div>
-
-      <hr style="margin: 20px 0; border: none; border-top: 1px solid #ccc;" />
-
-      <h3>Sample Share</h3>
-      <p>A web app for music producers to upload and share samples, collaborate with others, and build creative projects. Built using Django, mySQL, and Docker.</p>
-      <div class="project-links">
-        <a href="https://github.com/SampleShare/SampleShare" target="_blank">🔗 View on GitHub</a>
-      </div>
+  <div class="container">
+    <div class="header">
+      <h1>CHRISTOPHER PUGLIESE</h1>
+      <h2>EXPLORE MY RESUME, LATEST PROJECTS, AND VISUALIZATIONS</h2>
     </div>
 
-    <div class="button-container">
-      <a class="button" href="CHRISTOPHER PUGLIESE - RESUME 2025.pdf" target="_blank">📄 View My Resume</a>
-      <a class="button" href="https://github.com/chrispugliese/harshness-identifier">Harshness Identifier</a>
-      <a class="button" href="visualizations/d3/spotify_data.html">Spotify Data with D3.js</a>
-      <a class="button" href="visualizations/tableau/spotify_tableau_project.html">Spotify Data with Tableau</a>
-      <a class="button" href="visualizations/tableau/myViz.html">Tableau Project</a>
-      <a class="button" href="data/spending/spending_visualizations.html">Spending Analysis</a>
+    <div class="content-wrapper">
+      <div class="project-card">
+        <h3>RANDOM MELODY GENERATOR</h3>
+        <p>A Java application that generates random melodies in chosen keys, plays them, and exports as MIDI files for use in DAWs like Ableton, Logic, or FL Studio.</p>
+        <div class="project-links">
+          <a href="https://github.com/chrispugliese/melody-generator" target="_blank">🔗 VIEW ON GITHUB</a>
+        </div>
+
+        <hr />
+
+        <h3>SAMPLE SHARE</h3>
+        <p>A web app for music producers to upload and share samples, collaborate with others, and build creative projects. Built using Django, MySQL, and Docker.</p>
+        <div class="project-links">
+          <a href="https://github.com/SampleShare/SampleShare" target="_blank">🔗 VIEW ON GITHUB</a>
+        </div>
+      </div>
+
+      <div class="button-container">
+        <a class="button" href="CHRISTOPHER PUGLIESE - RESUME 2025.pdf" target="_blank">📄 VIEW MY RESUME</a>
+        <a class="button" href="https://github.com/chrispugliese/harshness-identifier">HARSHNESS IDENTIFIER</a>
+        <a class="button" href="visualizations/d3/spotify_data.html">SPOTIFY DATA WITH D3.JS</a>
+        <a class="button" href="visualizations/tableau/spotify_tableau_project.html">SPOTIFY DATA WITH TABLEAU</a>
+        <a class="button" href="visualizations/tableau/myViz.html">TABLEAU PROJECT</a>
+        <a class="button" href="data/spending/spending_visualizations.html">SPENDING ANALYSIS</a>
+      </div>
     </div>
   </div>
 
   <footer>
     <div class="socials">
-      <a href="https://github.com/chrispugliese" target="_blank">GitHub</a>
-      <a href="mailto:christopherpugliese38@gmail.com">Email</a>
-      <a href="https://www.linkedin.com/in/christopher-pugliese-36b558227/" target="_blank">LinkedIn</a>
+      <a href="https://github.com/chrispugliese" target="_blank">GITHUB</a>
+      <a href="mailto:christopherpugliese38@gmail.com">EMAIL</a>
+      <a href="https://www.linkedin.com/in/christopher-pugliese-36b558227/" target="_blank">LINKEDIN</a>
     </div>
-    <p>&copy; 2025 Christopher Pugliese. All rights reserved.</p>
+    <p>&copy; 2025 CHRISTOPHER PUGLIESE. ALL RIGHTS RESERVED.</p>
   </footer>
-
 </body>
 </html>

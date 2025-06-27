@@ -3,51 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Christopher Pugliese's Home Page</title>
+    <title>Christopher Pugliese's Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        body {
-            background-color: #f0f2f5;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            color: #333;
+        :root {
+            --bg: #0a0a0a;
+            --card-bg: rgba(16, 16, 16, 0.9);
+            --primary: #00ff41;
+            --subtext: #00cc33;
+            --accent: #00ff88;
+            --accent-dark: #00cc66;
+            --border: #00ff41;
+            --glow: #00ff41;
+            --text-shadow: 0 0 10px #00ff41;
+            --box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            background-color: var(--bg);
+            font-family: 'Roboto Mono', monospace;
+            color: var(--primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Animated Background */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .floating-pixels {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .pixel {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: var(--primary);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .pixel:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .pixel:nth-child(2) { left: 20%; animation-delay: 1s; }
+        .pixel:nth-child(3) { left: 30%; animation-delay: 2s; }
+        .pixel:nth-child(4) { left: 40%; animation-delay: 3s; }
+        .pixel:nth-child(5) { left: 50%; animation-delay: 4s; }
+        .pixel:nth-child(6) { left: 60%; animation-delay: 5s; }
+        .pixel:nth-child(7) { left: 70%; animation-delay: 0s; }
+        .pixel:nth-child(8) { left: 80%; animation-delay: 1s; }
+        .pixel:nth-child(9) { left: 90%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { transform: translateY(50vh) scale(1); opacity: 1; }
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeOut 1s ease-out 2s forwards;
+        }
+
+        .loading-text {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            color: var(--primary);
+            animation: loadingPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loadingPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; }
+        }
+
+        /* Main Content */
+        .container {
+            text-align: center;
+            max-width: 800px;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
         h1 {
-            color: #2C3E50;
-            margin-top: 50px;
-            font-size: 2.5em;
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            text-shadow: var(--text-shadow);
+            margin-bottom: 20px;
+            letter-spacing: 4px;
+            animation: glow 2s ease-in-out infinite alternate;
         }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px var(--glow); }
+            to { text-shadow: 0 0 20px var(--glow), 0 0 30px var(--glow); }
+        }
+
         h2 {
-            color: #7F8C8D;
-            font-size: 1.5em;
-            margin-bottom: 40px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.1rem;
+            color: var(--subtext);
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 50px;
+            animation: fadeInUp 1s ease-out 0.3s both;
         }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
         a {
             display: inline-block;
-            padding: 12px 24px;
-            background-color: #3498DB;
-            color: #fff;
+            padding: 18px 30px;
+            background: linear-gradient(45deg, var(--accent), var(--accent-dark));
+            color: var(--bg);
             text-decoration: none;
-            font-size: 1.2em;
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            font-weight: 700;
             border-radius: 8px;
-            transition: background-color 0.3s;
+            border: 1px solid var(--border);
+            box-shadow: var(--box-shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+            max-width: 400px;
+            margin: 0 auto;
         }
+
+        a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        a:hover::before {
+            left: 100%;
+        }
+
         a:hover {
-            background-color: #2980B9;
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 255, 65, 0.5);
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .container {
+                padding: 20px 15px;
+            }
+            
+            a {
+                padding: 15px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
         }
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading">
+        <div class="loading-text">INITIALIZING...</div>
+    </div>
 
-    <h1>Christopher Pugliese</h1>
-    <h2>Below are links to my latest Visualizations and Resume. Enjoy!</h2>
-    <a href="visualizations/tableau/myViz.html">View Tableau Project 2024-11-11</a>
-    <a href="visualizations/d3/spotify_data.html">Spotify Data Using D3.js</a>
-    <a href="visualizations/tableau/spotify_tableau_project.html">Spotify Data Using Tableau</a>
-    <a href="data/spending/spending_visualizations.html">Spending Analysis</a>
-    <a href="Christopher Pugliese Resume 2 2025-1.pdf">My Resume</a>
+    <!-- Animated Background -->
+    <div class="background-animation">
+        <div class="grid"></div>
+        <div class="floating-pixels">
+            <div class="pixel"></div>
+            <div class="pixel"></div>
+            <div class="pixel"></div>
+            <div class="pixel"></div>
+            <div class="pixel"></div>
+            <div class="pixel"></div>
+            <div class="pixel"></div>
+            <div class="pixel"></div>
+            <div class="pixel"></div>
+        </div>
+    </div>
 
-
+    <div class="container">
+        <h1>CHRISTOPHER PUGLIESE</h1>
+        <h2>BELOW ARE LINKS TO MY LATEST VISUALIZATIONS AND RESUME. ENJOY!</h2>
+        
+        <div class="links-container">
+            <a href="visualizations/tableau/myViz.html">VIEW TABLEAU PROJECT 2024-11-11</a>
+            <a href="visualizations/d3/spotify_data.html">SPOTIFY DATA USING D3.JS</a>
+            <a href="visualizations/tableau/spotify_tableau_project.html">SPOTIFY DATA USING TABLEAU</a>
+            <a href="data/spending/spending_visualizations.html">SPENDING ANALYSIS</a>
+            <a href="Christopher Pugliese Resume 2 2025-1.pdf">MY RESUME</a>
+        </div>
+    </div>
 </body>
 </html>
